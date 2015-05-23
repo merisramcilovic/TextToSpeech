@@ -71,8 +71,8 @@ public class MainActivity extends ActionBarActivity {
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
             Log.d("debug", matches.toString());
-            Log.d("debug", data.toString());
-            mText.setText(data.toString());
+            Log.d("debug", matches.get(0));
+            mText.setText(matches.get(0));
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

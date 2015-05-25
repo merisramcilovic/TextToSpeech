@@ -8,11 +8,15 @@
         <item>Bosnian</item>
         <item>Turkish</item>
         <item>English</item>
+        <item>French</item>
+        <item>German</item>
     </string-array>
 
     <string-array name="locales">
         <item>hr</item>
         <item>tr</item>
         <item>en</item>
+        <item>fr</item>
+        <item>de</item>
     </string-array>
 </resources>

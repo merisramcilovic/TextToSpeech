@@ -6,35 +6,67 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1">
 
-        <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="94dp"
-            android:id="@+id/mText"
-            android:layout_weight="1"
-            android:text="Enter your text here." />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="94dp"
+                android:id="@+id/mText"
+                android:layout_weight="1"
+                android:text="Enter your text here." />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="87dp"
+                android:text="Voice"
+                android:id="@+id/btnVoice"
+                android:onClick="onVoiceClick" /><![CDATA[
+
+
+
+
+
+            Button
+                android:layout_width="44dp"
+                android:layout_height="71dp"
+                android:id="@+id/button"
+                android:background="@android:drawable/presence_audio_busy"
+                android:layout_weight="0.02" />
+
+
+        ]]>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spnLanguage" />
+        </LinearLayout>
 
         <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="87dp"
-            android:text="Voice"
-            android:id="@+id/btnVoice"
-            android:onClick="onVoiceClick" /><![CDATA[
-
-
-
-        Button
-            android:layout_width="44dp"
-            android:layout_height="71dp"
-            android:id="@+id/button"
-            android:background="@android:drawable/presence_audio_busy"
-            android:layout_weight="0.02" />
-
-    ]]>
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="SPEAK"
+            android:id="@+id/btnSpeak"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.10"
+            android:textSize="30dp"
+            android:clickable="true"
+            android:onClick="onSpeakClick" />
     </LinearLayout>
 </RelativeLayout>

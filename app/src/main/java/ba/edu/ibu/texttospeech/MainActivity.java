@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements TextToSpeech.OnInitListener {
     private static final int REQUEST_VOICE_RECOGNITION = 1234;
-    private static final int REQUEST_TTS_INSTALL = 4321;
+    private static final int REQUEST_TTS_CHECK = 4321;
 
     private TextToSpeech tts;
     @Override
@@ -60,18 +60,16 @@ public class MainActivity extends ActionBarActivity {
 
         // Check If It is needed to download TTS data
         Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-        startActivityForResult(checkIntent, REQUEST_TTS_INSTALL);
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, REQUEST_TTS_CHECK);
 
-        // Disable button if no recognition service is present
+        //Disable button if no recognition service is present
         PackageManager pm = getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(
                 new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         if (activities.size() == 0) {
             voiceButton.setEnabled(false);
         }
-
-        tts.speak("Hello",TextToSpeech.QUEUE_FLUSH, null);
     }
 
     /**
@@ -84,6 +82,7 @@ public class MainActivity extends ActionBarActivity {
         String[] locales = getResources().getStringArray(R.array.locales);
         Log.d("selected pos", String.valueOf(l));
         Log.d("locale", locales[l]);
+        if (tts==null) { tts = new TextToSpeech(this,this); }
         tts.setLanguage(new Locale(locales[l]));
         tts.speak(mText.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
     }
@@ -117,30 +116,18 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if(requestCode == REQUEST_TTS_INSTALL){
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+        if(requestCode == REQUEST_TTS_CHECK){
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
+            {
                 // success, create the TTS instance
-                tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-
-                        Log.d("ENGLISH_TTS", String.valueOf(tts.isLanguageAvailable(Locale.ENGLISH)));
-                        Log.d("BOSNIAN_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("hr", "hr"))));
-                        Log.d("TURKISH_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("tr", "TR"))));
-                        Log.d("FRENCH_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("fr"))));
-
-                        tts.speak("Hello!", TextToSpeech.QUEUE_ADD, null);
-                    }
-                });
-            } else {
+                tts = new TextToSpeech(this, this);
+            }
+            else
+            {
                 // missing data, install it
                 Intent installIntent = new Intent();
-                installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                ArrayList<String> languages = new ArrayList<String>();
-                languages.add("tr_TR");
-                languages.add("hr_HR");
-                installIntent.putStringArrayListExtra(TextToSpeech.Engine.EXTRA_CHECK_VOICE_DATA_FOR
-                        , languages);
+                installIntent.setAction(
+                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                 startActivity(installIntent);
             }
         }
@@ -179,5 +166,16 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onInit(int status) {
+        Log.d("ENGLISH_TTS", String.valueOf(tts.isLanguageAvailable(Locale.ENGLISH)));
+        Log.d("BOSNIAN_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("hr", "HR"))));
+        Log.d("TURKISH_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("tr", "TR"))));
+        Log.d("FRENCH_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("fr"))));
+        Log.d("ARABIC_TTS", String.valueOf(tts.isLanguageAvailable(new Locale("ar"))));
+
+        tts.speak("Hello!", TextToSpeech.QUEUE_ADD, null);
     }
 }
